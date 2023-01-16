@@ -1,50 +1,61 @@
-Blogapp
-Using Flask to build blog that .
+# nats-listener
 
-Integration with mongo DB.
+This application is a simple web service that allows for easy integration with a NATS messaging service. 
+It sets up a web server on port 5000 and defines several routes for interacting with the messaging service and a Postgres database.
 
-Extension:
-MONGODB: mongo DB for the users and the posts that are posted in the blog.
+## Getting Started
 
-Testing: E2E test using curl for all the features in the blog.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-Installation
-Install with pip:
+### Prerequisites
 
-$ pip install -r requirements.txt
-Flask Application Structure
-.
-├── microblog
-│   ├── app
-│   │   ├── forms.py
-│   │   ├── __init__.py
-│   │   ├── routes.py
-│   │   ├── templates
-│   │   │   ├── base.html
-│   │   │   ├── delete_edit.html
-│   │   │   ├── index.html
-│   │   │   ├── login.html
-│   │   │   └── posts.html
+- Python 3.7+
+- A running NATS messaging service
+- A running Postgres database
 
+### Installing
 
-Run Flask
-flask run
-In flask, Default port is 5000
+1. Clone the repository
+'''
+    $ git clone git@github.com:LizAsraf/nats-publisher.git
+'''
 
+2. Create a virtual environment and activate it
+'''
+    $ python3 -m venv env
+    $ source env/bin/activate
+'''
 
+3. Install the dependencies
+'''
+    $ pip install -r requirements.txt
+'''
 
+4. Set the following environment variables:
+- `POSTGRES_USER`: the username for the Postgres database
+- `POSTGRES_PASSWORD`: the password for the Postgres database
+- `DATABASE_HOST`: the hostname or IP address of the Postgres database
+- `PORT`: the port number of the Postgres database
+- `POSTGRES_DB`: the name of the Postgres database
 
+5. Run the application
+'''
+    $ python sender_app.py
+'''
 
+## Usage
 
-This application is a Flask web application that connects to a Postgres database and a NATS messaging server. 
-The application sets up the Flask application, connects to the Postgres database and NATS server.
-The routes for the application and handles incoming requests:
+Once the application is running, you can access the following routes:
+- `/`: Returns a simple "Hello Aiohttp!" message
+- `/hit`: Publishes a message to the "request" subject and returns the message data
+- `/count`: Queries the Postgres database for the number of rows in the "messages" table and returns that count as a JSON response
 
-The root endpoint '/' and the '/count' both are a simple GET endpoint that establishes a session with the Postgres database using SQLAlchemy's ORM,
-the application queries the message table and retrieve the count of the rows in the table. 
-The '/hit' endpoint accepts POST method used to send message to a NATS server. 
-Prometheus metrics have been integrated on the '/metrics' route
-you can also check the logs for the application using python logger.
+## Built With
 
-The application using environment variables to configure the connection to the Postgres database and NATS server,
-also there are default values if the variables are not set.
+* [panini](https://pypi.org/project/panini/) - A library for easy integration with NATS messaging services
+* [aiohttp](https://docs.aiohttp.org/en/stable/) - Asynchronous HTTP client/server framework
+* [SQLAlchemy](https://www.sqlalchemy.org/) - A SQL toolkit and ORM
+
+## Authors
+
+* **Liz Asraf** - *Initial work* - [Your Github](https://github.com/LizAsraf/)
