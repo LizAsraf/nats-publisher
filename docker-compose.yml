@@ -1,0 +1,60 @@
+version: "3.9"
+
+volumes:
+  postgressdb:
+
+services: 
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    networks:
+      - docker_compose
+    volumes:
+      - "/custom/mount:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+    
+    
+  serviceA:
+    container_name: serviceA
+    image: gcr.io/oceanic-works-374915/service_a:v1.0
+    ports:
+      - 5000:5000    
+    networks:
+      - jenk_net
+      - docker_compose
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      DATABASE_HOST: ${DATABASE_HOST}
+      PORT: ${PORT}
+
+  serviceB:
+    container_name: serviceB
+    image: gcr.io/oceanic-works-374915/service_b:v1.0
+    networks:
+      - jenk_net
+      - docker_compose
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      DATABASE_HOST: ${DATABASE_HOST}
+      PORT: ${PORT}
+
+  nats_messanger:
+    image: nats:latest
+    container_name: nats_messanger
+    networks:
+      - jenk_net
+    
+networks:
+  jenk_net:
+    name: jenk_net
+    external: false
+  docker_compose:
+    name: docker_compose   
